@@ -1,0 +1,14 @@
+{
+  "name": "center-of-the-universe",
+  "version": "0.0.1",
+  "description": "'Center of the Universe' method for learning guitar chords.",
+  "author": "Nate Fitch <nfitch@nfprod.com>",
+  "engine": [ "node >=0.8.1" ],
+  "private": true,
+  "keywords": [],
+  "devDependencies": {
+    "node-static": "latest"
+  },
+  "files": ["static","package.json","README.md"],
+  "main": "server.js"
+}

@@ -1,0 +1,57 @@
+<html>
+<head>
+  <script src="js/jquery-1.8.3.min.js"></script>
+  <script src="js/arbor.js"></script>
+  <script src="js/arbor-graphics.js"></script>
+  <script src="js/arbor-renderer.js"></script>
+</head>
+<body>
+</body>
+<div id="content">
+  <canvas id="viewport" width="800" height="600"></canvas>
+  <script language="javascript" type="text/javascript">
+    /**
+    //Code before json replacement.
+    var sys = arbor.ParticleSystem(1000, 400,1);
+    sys.parameters({gravity:true});
+    sys.renderer = Renderer("#viewport") ;
+    var animals = sys.addNode('Animals',{'color':'red','shape':'dot','label':'Animals'});
+    var dog = sys.addNode('dog',{'color':'green','shape':'dot','label':'dog'});
+    var cat = sys.addNode('cat',{'color':'blue','shape':'dot','label':'cat'});
+    sys.addEdge(animals, dog);
+    sys.addEdge(animals, cat);
+    */
+
+    var sys = arbor.ParticleSystem(1000, 400,1);
+    sys.parameters({gravity:true});
+    sys.renderer = Renderer("#viewport") ;
+    var data = {
+        nodes:{
+            animals:{'color':'red','shape':'dot','label':'Animals'},
+            dog:{'color':'green','shape':'dot','label':'dog'},
+            cat:{'color':'blue','shape':'dot','label':'cat'}
+        },
+        edges:{
+            animals:{ dog:{}, cat:{} }
+        }
+    };
+    sys.graft(data);
+
+    setTimeout(function(){
+        var postLoadData = {
+            nodes:{
+                joe:{'color':'orange','shape':'dot','label':'joe'},
+                fido:{'color':'green','shape':'dot','label':'fido'},
+                fluffy:{'color':'blue','shape':'dot','label':'fluffy'}
+            },
+            edges:{
+                dog:{ fido:{} },
+                cat:{ fluffy:{} },
+                joe:{ fluffy:{},fido:{} }
+            }
+        };
+        sys.graft(postLoadData);
+    },10000);
+  </script>
+</div>
+</html>
