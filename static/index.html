@@ -4,54 +4,58 @@
   <script src="js/arbor.js"></script>
   <script src="js/arbor-graphics.js"></script>
   <script src="js/arbor-renderer.js"></script>
+  <script type="text/javascript">
+    var chords = {
+      "G": { },
+      "C": { },
+      "D": { }
+    };
+    var center = null;
+    var sys = null;
+
+    //TODO: This'll require a lot of work to undo what's there
+    //      once we have events that cause actions.
+    function makeCenter(newCenter) {
+      if (!chords[newCenter]) {
+        return;
+      }
+
+      //Make nodes
+      //TODO: find the ones that are 'active'
+      for (var c in chords) {
+        if (!chords[c].node) {
+          var n = sys.addNode(c, {'color':'blue','shape':'dot','label':c});
+          chords[c].node = n;
+        }
+      }
+
+      //Hook them all up...
+      var centerNode = chords[newCenter].node;
+      for (var c in chords) {
+        if (newCenter !== center && chords[c].node) {
+           sys.addEdge(centerNode, chords[c].node);
+        }
+      }
+
+      //TODO: Remove me.
+      //console.log(JSON.stringify(centerNode));
+      centerNode.data.color = 'green';
+      center = newCenter;
+    }
+
+    $(document).ready(function () {
+      //Was originally 1000, 400, 1
+      sys = arbor.ParticleSystem(40, 1000, 100);
+      sys.parameters({gravity:true});
+      sys.renderer = Renderer("#viewport") ;
+
+      makeCenter("G");
+    });
+  </script>
 </head>
 <body>
 </body>
 <div id="content">
   <canvas id="viewport" width="800" height="600"></canvas>
-  <script language="javascript" type="text/javascript">
-    /**
-    //Code before json replacement.
-    var sys = arbor.ParticleSystem(1000, 400,1);
-    sys.parameters({gravity:true});
-    sys.renderer = Renderer("#viewport") ;
-    var animals = sys.addNode('Animals',{'color':'red','shape':'dot','label':'Animals'});
-    var dog = sys.addNode('dog',{'color':'green','shape':'dot','label':'dog'});
-    var cat = sys.addNode('cat',{'color':'blue','shape':'dot','label':'cat'});
-    sys.addEdge(animals, dog);
-    sys.addEdge(animals, cat);
-    */
-
-    var sys = arbor.ParticleSystem(1000, 400,1);
-    sys.parameters({gravity:true});
-    sys.renderer = Renderer("#viewport") ;
-    var data = {
-        nodes:{
-            animals:{'color':'red','shape':'dot','label':'Animals'},
-            dog:{'color':'green','shape':'dot','label':'dog'},
-            cat:{'color':'blue','shape':'dot','label':'cat'}
-        },
-        edges:{
-            animals:{ dog:{}, cat:{} }
-        }
-    };
-    sys.graft(data);
-
-    setTimeout(function(){
-        var postLoadData = {
-            nodes:{
-                joe:{'color':'orange','shape':'dot','label':'joe'},
-                fido:{'color':'green','shape':'dot','label':'fido'},
-                fluffy:{'color':'blue','shape':'dot','label':'fluffy'}
-            },
-            edges:{
-                dog:{ fido:{} },
-                cat:{ fluffy:{} },
-                joe:{ fluffy:{},fido:{} }
-            }
-        };
-        sys.graft(postLoadData);
-    },10000);
-  </script>
 </div>
 </html>
